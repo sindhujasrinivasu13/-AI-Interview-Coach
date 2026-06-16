@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Interview Coach - Mock Interviews & Real-time Evaluation</title>
+  <meta name="description" content="Prepare for interviews with voice-guided AI mock sessions, real-time speech-to-text transcriptions, and comprehensive feedback reports.">
+  <link rel="stylesheet" href="style.css">
+  <!-- Chart.js CDN for Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div>
+        <div class="brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+              <path d="M19 10v1a7 7 0 0 1-14 0v-1"/>
+              <line x1="12" y1="19" x2="12" y2="22"/>
+            </svg>
+          </div>
+          <span class="brand-name">Coach.AI</span>
+        </div>
+        
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="#" class="nav-link active" data-view="dashboard" id="nav-dashboard-link">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="7" height="9" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="5" rx="1"></rect>
+                <rect x="14" y="12" width="7" height="9" rx="1"></rect>
+                <rect x="3" y="16" width="7" height="5" rx="1"></rect>
+              </svg>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-view="interview-setup" id="nav-setup-link" onclick="startSetup(); return false;">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+              <span>Mock Interview</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-view="history" id="nav-history-link">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>History</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-view="settings" id="nav-settings-link">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              <span>Settings</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="user-profile">
+        <div class="avatar">U</div>
+        <div class="user-info">
+          <div class="username" id="profile-name">Interview Candidate</div>
+          <div class="user-role">Premium Member</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Glow effects -->
+      <div class="glow-orb glow-orb-1"></div>
+      <div class="glow-orb glow-orb-2"></div>
+
+      <!-- Dashboard View -->
+      <section id="dashboard" class="content-section active">
+        <header class="section-header">
+          <h1 class="section-title">Interview Dashboard</h1>
+          <p class="section-desc">Track your progress and practice mock interviews to land your dream job.</p>
+        </header>
+
+        <!-- API Key warning banner -->
+        <div class="api-warning-banner" id="api-warning">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <div>
+            <strong>Simulated Coach Mode Enabled:</strong> Complete AI generation is off. Provide a <a onclick="showView('settings')">Gemini API Key</a> in the settings to unlock dynamically tailored questions and rich LLM response critiques.
+          </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="dashboard-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-title">Readiness Score</span>
+              <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-value" id="stat-avg-score">N/A</div>
+            <div class="stat-footer">Overall performance average</div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-title">Sessions Run</span>
+              <div class="stat-icon secondary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-value" id="stat-total-interviews">0</div>
+            <div class="stat-footer">Completed mock interviews</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-title">Top Strength</span>
+              <div class="stat-icon accent">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-value" id="stat-top-strength" style="font-size: 1.25rem; font-weight: 600; padding: 0.25rem 0;">N/A</div>
+            <div class="stat-footer">Highest rated response area</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-title">Improvement Focus</span>
+              <div class="stat-icon" style="color: var(--danger); background: rgba(239, 68, 68, 0.1);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-value" id="stat-top-weakness" style="font-size: 1.25rem; font-weight: 600; padding: 0.25rem 0;">N/A</div>
+            <div class="stat-footer">Lowest rated response area</div>
+          </div>
+        </div>
+
+        <!-- Score Chart -->
+        <div class="visuals-grid">
+          <div class="panel-card">
+            <div class="panel-title">Readiness Score Progression</div>
+            <div class="chart-container">
+              <canvas id="scoreChart"></canvas>
+            </div>
+          </div>
+          
+          <div class="panel-card" style="display: flex; flex-direction: column; justify-content: center; gap: 1rem; text-align: center;">
+            <div style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 700;">Ready to level up?</div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Mock interviews simulate a full panel screen. Receive scoring based on communication speed, technical concepts, and confidence.</p>
+            <button class="btn btn-primary" style="margin: 0 auto;" onclick="startSetup()">Start Mock Interview</button>
+          </div>
+        </div>
+
+        <!-- Start practice banner -->
+        <div class="action-banner">
+          <div class="action-content">
+            <h2 class="action-title">Configure a Tailored Interview Session</h2>
+            <p class="action-desc">Upload your resume and paste the target job description to practice specific, targeted questions designed by the AI interviewer.</p>
+          </div>
+          <button class="btn btn-primary" onclick="startSetup()">Set Up Session</button>
+        </div>
+      </section>
+
+      <!-- Interview Setup View -->
+      <section id="interview-setup" class="content-section">
+        <div class="setup-panel">
+          <div class="setup-card">
+            <h2 class="setup-title">Interview Configuration</h2>
+            
+            <form id="setup-form" class="settings-grid">
+              <div class="form-group">
+                <label for="setup-role" class="form-label">Target Job Role</label>
+                <select id="setup-role" class="form-select" required></select>
+              </div>
+              
+              <div class="form-group">
+                <label for="setup-experience" class="form-label">Experience Seniority</label>
+                <select id="setup-experience" class="form-select">
+                  <option value="junior">Junior (Entry-level)</option>
+                  <option value="mid" selected>Mid-level (2-5 years)</option>
+                  <option value="senior">Senior (5+ years / Lead)</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="setup-jd" class="form-label">Job Description (Optional)</label>
+                <textarea id="setup-jd" class="form-textarea" placeholder="Paste the text of the job description you're applying for. The AI will customize questions to match the skills list."></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label for="setup-resume" class="form-label">Your Resume (Optional)</label>
+                <textarea id="setup-resume" class="form-textarea" placeholder="Paste your resume text. The AI will reference your profile in behavioral questions."></textarea>
+              </div>
+              
+              <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem;">
+                <button type="button" class="btn btn-secondary" onclick="showView('dashboard')">Back</button>
+                <button type="submit" class="btn btn-primary">Begin Interview Room</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Active Mock Interview Room -->
+      <section id="interview-room" class="content-section">
+        <div class="interview-session">
+          
+          <!-- Coach Info & Avatar Panel -->
+          <div class="interviewer-column">
+            <div class="avatar-container" id="interviewer-avatar">
+              <div class="avatar-halo"></div>
+              <div class="interviewer-pic">AI</div>
+            </div>
+            
+            <div class="coach-info">
+              <h3 class="coach-name">Coach Sarah</h3>
+              <p class="coach-title">AI Recruiter & Technical Assessor</p>
+            </div>
+            
+            <span class="status-badge idle" id="interviewer-status-badge">Idle</span>
+            
+            <!-- Waveform Visualizer -->
+            <div class="audio-visualization" id="audio-waveform">
+              <div class="audio-bar"></div>
+              <div class="audio-bar"></div>
+              <div class="audio-bar"></div>
+              <div class="audio-bar"></div>
+              <div class="audio-bar"></div>
+              <div class="audio-bar"></div>
+              <div class="audio-bar"></div>
+              <div class="audio-bar"></div>
+              <div class="audio-bar"></div>
+            </div>
+            
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;" id="exit-session-btn">Exit Session</button>
+          </div>
+          
+          <!-- Chat Interaction Panel -->
+          <div class="chat-column">
+            <div class="question-card">
+              <div class="q-indicator" id="question-number">Question 1 of 5</div>
+              <p class="q-text" id="question-text">Initializing Sarah, your interviewer...</p>
+            </div>
+            
+            <div class="response-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">Your Response Input</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Speak directly or write below</span>
+              </div>
+              <textarea id="user-response" class="response-textarea" placeholder="Type or click the microphone to dictate your answer..."></textarea>
+              
+              <div class="controls-row">
+                <div class="left-controls">
+                  <!-- Mic Button for Speech recognition -->
+                  <button class="mic-btn" id="mic-button" title="Toggle Voice Recognition">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                      <line x1="12" y1="19" x2="12" y2="23"></line>
+                      <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                  </button>
+                  
+                  <!-- Speaker Button to toggle speech output -->
+                  <button class="speaker-btn" id="speaker-button" title="Toggle Text-to-Speech Output">
+                    <svg viewBox="0 0 24 24">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                    </svg>
+                  </button>
+                </div>
+                
+                <button class="btn btn-primary" id="next-question-btn">Next Question</button>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- Feedback Report Details View -->
+      <section id="report-view" class="content-section">
+        <div class="report-panel">
+          <header class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+              <h1 class="section-title" id="report-role-title">Interview Report</h1>
+              <p class="section-desc" id="report-date">June 15, 2026</p>
+            </div>
+            <button class="btn btn-secondary" onclick="showView('dashboard')">Close Report</button>
+          </header>
+          
+          <div class="report-card">
+            <div class="score-summary-row">
+              <div class="overall-score-gauge">
+                <div class="gauge-circle" id="report-gauge-circle">
+                  <div class="gauge-value" id="report-score-val">0%</div>
+                </div>
+                <div style="font-family: var(--font-heading); font-weight: 600; font-size: 1.1rem;">Overall Score</div>
+              </div>
+              
+              <div class="scores-breakdown">
+                <div class="score-bar-group">
+                  <div class="score-bar-label">
+                    <span>Communication</span>
+                    <span id="bar-communication-val">0%</span>
+                  </div>
+                  <div class="score-bar-bg">
+                    <div class="score-bar-fill" id="bar-communication"></div>
+                  </div>
+                </div>
+
+                <div class="score-bar-group">
+                  <div class="score-bar-label">
+                    <span>Relevance</span>
+                    <span id="bar-relevance-val">0%</span>
+                  </div>
+                  <div class="score-bar-bg">
+                    <div class="score-bar-fill" id="bar-relevance"></div>
+                  </div>
+                </div>
+
+                <div class="score-bar-group">
+                  <div class="score-bar-label">
+                    <span>Technical Depth</span>
+                    <span id="bar-technical-val">0%</span>
+                  </div>
+                  <div class="score-bar-bg">
+                    <div class="score-bar-fill" id="bar-technical"></div>
+                  </div>
+                </div>
+
+                <div class="score-bar-group">
+                  <div class="score-bar-label">
+                    <span>Confidence</span>
+                    <span id="bar-confidence-val">0%</span>
+                  </div>
+                  <div class="score-bar-bg">
+                    <div class="score-bar-fill" id="bar-confidence"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="strengths-weaknesses">
+              <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.2rem; color: var(--success); font-weight: 600;">Key Strengths</h3>
+                <ul class="bullet-list strengths-list" id="report-strengths-list"></ul>
+              </div>
+              
+              <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.2rem; color: var(--warning); font-weight: 600;">Areas of Improvement</h3>
+                <ul class="bullet-list improvements-list" id="report-improvements-list"></ul>
+              </div>
+            </div>
+            
+            <h2 style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Detailed Question Breakdown</h2>
+            <div class="qa-review-section" id="report-qa-container"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- History List View -->
+      <section id="history" class="content-section">
+        <header class="section-header">
+          <h1 class="section-title">Interview Session History</h1>
+          <p class="section-desc">Review your past evaluation scores and feedback reports over time.</p>
+        </header>
+        
+        <div id="history-list-container" class="history-list"></div>
+      </section>
+
+      <!-- Settings View -->
+      <section id="settings" class="content-section">
+        <header class="section-header">
+          <h1 class="section-title">Application Settings</h1>
+          <p class="section-desc">Manage API credentials and text-to-speech preferences.</p>
+        </header>
+
+        <div class="panel-card" style="max-width: 800px;">
+          <form id="settings-form" class="settings-grid">
+            <div class="form-group">
+              <label for="settings-api-key" class="form-label">Google Gemini API Key</label>
+              <input type="password" id="settings-api-key" class="form-input" placeholder="AIzaSy...">
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+                Your API key is stored locally in your browser storage and is never uploaded. You can get an API key from Google AI Studio.
+              </p>
+            </div>
+            
+            <div class="form-group" style="flex-direction: row; align-items: center; gap: 1rem; margin-top: 0.5rem;">
+              <input type="checkbox" id="settings-voice-enabled" style="width: 18px; height: 18px; cursor: pointer;">
+              <label for="settings-voice-enabled" class="form-label" style="margin: 0; cursor: pointer;">Enable Interviewer Voice Output (TTS)</label>
+            </div>
+            
+            <div class="form-group">
+              <label for="settings-voice-select" class="form-label">Select Interviewer Voice Profile</label>
+              <select id="settings-voice-select" class="form-select"></select>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem;">
+              <button type="submit" class="btn btn-primary">Save Settings</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="mockData.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
